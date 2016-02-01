@@ -18,20 +18,14 @@ $( document ).ready(function() {
     // Place all your Javascript code inside this "document ready" function so
     // it does not run until the DOM is ready for Javascript manipulation.
 
-    // TODO: Create a function to listen for clicks on the "login" button.
-    //      1. When a user clicks the "login" button, hide the login
-    //          form elements on the page.
-    //      2. Fill the user's first and last name into `div.user-info`.
-    //      (NOTE: You do not have to perform any validation on the data as
-    //          a base requirement.)
-    
-          
-    //  When user clicks on "login" button, hide the login form elements and show "Welcome, userInfo"
+       
+    // This function listens for clicks on the "login" button.      
+    /*  When user clicks on "login" button, hide the login form elements and show "Welcome, name".  Not actually validating or checking any data here, but going to use the name from above in variable "userInfo"" for a mock user.  This function checks var userInfo and inputs that text.*/
     $('.login-button').on('click', function(event){
         console.log(event);
         $('#login-form').hide();
+        $('.user-fullname').text(userInfo.firstName + ' ' + userInfo.lastName);
         $('.user-info').show(400);
-        $('.user-fullname').text(userInfo);  //not working? trying to fill in name from above...
     });
 
     // When user clicks "logout" button, show the login form elements again
@@ -41,21 +35,21 @@ $( document ).ready(function() {
             $('#login-form').show(400);
     });
 
-    // TODO: Create a function to listen for clicks on all the "View Details"
-    // buttons so that when a user clicks a "View Details" button they see
-    // the content contained in the elements with the class "details" in the
-    // proper part of the screen.
-    //      1. When user clicks a "view details" button, find the parent of that element.
-    //      2. Within that parent, find all the elements that have the class `details`.
-    //      3. Toggle visibility of all the elements within that parent with the class `details`.
-    //      4. Change the text of the "view details" button to read "hide details" so the user
-    //          understands they can hide the text again.
+   
 
+    // This function listens for clicks on any of the view details buttons.  
     $('.view-details').on('click', function(event){
         console.log(event);
         var targetElement = event.target;
+        
+        // when button is clicked, find that element's grandparent
         var container = targetElement.parentElement.parentElement;
+        
+        // within this element find all elements with the class "details"
         $(container).find('.details').each(function(index, el){
+            
+            // Using if/else, toggle the visibility of all elements within the parent "details" element when the 'View Details' button is clicked
+            // Also, if the details are showing, then change text of the button to "Hide details"
             if ($(el).is(':visible')){
                 $(el).fadeOut();
                 targetElement.innerText = "View Details"
@@ -65,34 +59,27 @@ $( document ).ready(function() {
             }
         });
     });
-
-    // TODO: Create a function that listens for clicks on the voting buttons and
-    // looks at the `data-vote` attribute on each button to see what was voted for,
-    // then determines the updated vote breakdown to adjust the progress bars.
-    //      1. Set up an event listener on the buttons with the `vote` class.
-    //      2. When a button is clicked, look at the `data-vote` attribute to determine
-    //          what the user is voting for ("great" or "greatest").
-    //      3. Increment the counter for whichever vote talley is affected.
-    //      4. Determine the respective percentages (out of 100) for each progress bar.
-    //      5. Modify the `width` attribute on each progress bar to set the updated percentage.
-
-    //all of this inside the ready (function)
-
- 
-    //this needs to be above the function below
+    
     var updateBars = function (voteCounts) {
-        var greatBar = $('.great-progress');  //need a period here bc we are referencing a css class
+        var greatBar = $('.great-progress');  
         var greatestBar = $('.greatest-progress');
+        
+        // determine percentage of total votes for each progress bar based on voteCounts from function below
         var greatWidth = voteCounts.great/voteCounts.total; 
         var greatestWidth = voteCounts.greatest/voteCounts.total;
-        greatBar.css('width', greatWidth*100 + '%');  //the % is a string so it needs to be in quotes
+        
+        // Change width of each bar according to its percentage of the votes
+        // Multiply results from above by 100 to get percentages out of 100
+        greatBar.css('width', greatWidth*100 + '%');  
         greatestBar.css('width', greatestWidth*100 + '%');
         
     };
 
-    //voting function:
+    // Function listening for clicks on the buttons with class of "vote"
     $('.vote').on('click', function (event) {
         var button = $(event.target);
+        
+        // determine whether user is clicking on "great"" or "greatest" button and then add 1 to the vote count for that item
         if(button.data('vote') == 'great') {
             voteCounts.great += 1;
         }else if (button.data('vote') == 'greatest') {
